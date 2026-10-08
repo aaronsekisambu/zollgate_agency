@@ -8,9 +8,21 @@ import "./globals.css";
 
 const poppins = Poppins({ weight: ["300", "400", "500", "600", "700", "800"], subsets: ["latin"], variable: "--font-poppins" });
 
+const description =
+  "Zollgate Agency represents, develops and protects ambitious footballers, from first contract to final whistle.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://zollgate.de"),
   title: { default: "Zollgate Agency | Football Player Representation", template: "%s | Zollgate Agency" },
-  description: "Zollgate is a football agency representing, developing and protecting professional players across Europe and beyond.",
+  description,
+  openGraph: {
+    type: "website",
+    siteName: "Zollgate Agency",
+    locale: "en_GB",
+    title: "Zollgate Agency | Football Player Representation",
+    description,
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
