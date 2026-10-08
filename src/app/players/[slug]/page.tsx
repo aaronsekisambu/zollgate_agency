@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ButtonLink, Eyebrow, PlayerCard, PlayerPortrait } from "@/components/ui";
-import { formatDate, getPlayer, players } from "@/lib/data";
+import { ButtonLink, Eyebrow, JsonLd, PlayerCard, PlayerPortrait } from "@/components/ui";
+import { formatDate, getPlayer, players, siteUrl, type Player } from "@/lib/data";
+import { breadcrumbs, pageMetadata } from "@/lib/seo";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -12,11 +13,37 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const player = getPlayer((await params).slug);
+  if (!player) return { title: "Player not found", robots: { index: false } };
+  const lead = [player.role ?? player.position, player.club && `at ${player.club}`].filter(Boolean).join(" ");
+  return pageMetadata({
+    title: player.club ? `${player.name} (${player.club})` : player.name,
+    description: `${lead ? `${lead}, represented` : "Represented"} by Zollgate Agency. ${player.bio}`,
+    path: `/players/${player.slug}`,
+    image: player.photo ? { url: player.photo, alt: player.name } : undefined,
+    keywords: [player.name, player.club, player.league, player.position, player.nationality, "football player", "Zollgate Agency"].filter(
+      (k): k is string => Boolean(k),
+    ),
+  });
+}
+
+function playerLd(player: Player) {
+  const url = `${siteUrl}/players/${player.slug}`;
   return {
-    title: player ? player.name : "Player not found",
-    description: player?.bio,
-    alternates: player ? { canonical: `/players/${player.slug}` } : undefined,
-    openGraph: player?.photo ? { images: [player.photo] } : undefined,
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    url,
+    mainEntity: {
+      "@type": "Person",
+      name: player.name,
+      url,
+      description: player.bio,
+      image: player.photo && `${siteUrl}${player.photo}`,
+      jobTitle: player.role ?? player.position ?? "Footballer",
+      nationality: player.nationality,
+      birthDate: player.birthDate,
+      height: player.height,
+      affiliation: player.club && { "@type": "SportsTeam", name: player.club, sport: "Soccer" },
+    },
   };
 }
 
@@ -55,6 +82,12 @@ export default async function PlayerPage({ params }: Props) {
 
   return (
     <>
+      <JsonLd
+        data={[
+          breadcrumbs({ name: "Players", path: "/players" }, { name: player.name, path: `/players/${player.slug}` }),
+          playerLd(player),
+        ]}
+      />
       <section className="border-b border-line bg-pitch pt-28 sm:pt-36">
         <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[1fr_1.2fr]">
           <PlayerPortrait player={player} priority sizes="(min-width: 1024px) 40vw, 100vw" className="aspect-[4/5] rounded-t-[2rem]" />

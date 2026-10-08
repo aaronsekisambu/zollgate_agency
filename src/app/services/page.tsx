@@ -1,18 +1,38 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { ButtonLink, Icon, PageHero, SectionHeading } from "@/components/ui";
-import { services, steps } from "@/lib/data";
+import { ButtonLink, Icon, JsonLd, PageHero, SectionHeading } from "@/components/ui";
+import { services, siteUrl, steps } from "@/lib/data";
+import { breadcrumbs, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Services",
   description:
     "Player representation, contract negotiation, scouting, career development, legal support, media and relocation services for professional footballers.",
-  alternates: { canonical: "/services" },
+  path: "/services",
+  keywords: ["player representation", "contract negotiation", "football scouting", "career development", "football agent services"],
+});
+
+const servicesLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Zollgate Agency services",
+  itemListElement: services.map((s, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    item: {
+      "@type": "Service",
+      name: s.title,
+      description: s.text,
+      image: `${siteUrl}${s.image}`,
+      provider: { "@id": `${siteUrl}/#organization` },
+    },
+  })),
 };
 
 export default function ServicesPage() {
   return (
     <>
+      <JsonLd data={[breadcrumbs({ name: "Services", path: "/services" }), servicesLd]} />
       <PageHero
         eyebrow="Services"
         title="Everything a career needs"

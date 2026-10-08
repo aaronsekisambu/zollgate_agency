@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageHero } from "@/components/ui";
+import { JsonLd, PageHero } from "@/components/ui";
 import { company } from "@/lib/data";
+import { breadcrumbs, pageMetadata } from "@/lib/seo";
 import ContactForm from "./ContactForm";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Contact",
   description:
     "Contact Zollgate Agency in Lindau am Bodensee. Players, parents and clubs can reach our agents by email, phone or the enquiry form.",
-  alternates: { canonical: "/contact" },
-};
+  path: "/contact",
+  keywords: ["contact football agent", "football agency Germany", "Zollgate Agency contact", "Lindau"],
+});
 
 const details: [string, React.ReactNode][] = [
   ["Email", <a key="e" className="hover:text-brand-deep" href={`mailto:${company.email}`}>{company.email}</a>],
@@ -21,6 +23,7 @@ const details: [string, React.ReactNode][] = [
 export default function ContactPage() {
   return (
     <>
+      <JsonLd data={breadcrumbs({ name: "Contact", path: "/contact" })} />
       <PageHero
         eyebrow="Contact"
         title="Let's talk football"

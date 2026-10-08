@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { ButtonLink, PageHero, SectionHeading } from "@/components/ui";
+import { ButtonLink, JsonLd, PageHero, SectionHeading } from "@/components/ui";
 import { company } from "@/lib/data";
+import { breadcrumbs, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "About",
   description:
     "Meet Zollgate Agency: a player-first football agency built on transparency, licensed expertise and long-term career thinking.",
-  alternates: { canonical: "/about" },
-};
+  path: "/about",
+  keywords: ["football agency", "player-first agency", "licensed football agents", "Zollgate"],
+});
 
 const values = [
   { title: "Player first", text: "Every decision starts with what is best for the player's long-term career, not the next commission." },
@@ -19,6 +21,7 @@ const values = [
 export default function AboutPage() {
   return (
     <>
+      <JsonLd data={breadcrumbs({ name: "About us", path: "/about" })} />
       <PageHero
         eyebrow="About us"
         title="Built for players"

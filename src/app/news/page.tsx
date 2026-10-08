@@ -1,19 +1,22 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { PageHero } from "@/components/ui";
+import { JsonLd, PageHero } from "@/components/ui";
 import { formatDate, posts } from "@/lib/data";
+import { breadcrumbs, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "News",
   description:
     "Latest signings, transfers and updates from Zollgate Agency and the footballers we represent.",
-  alternates: { canonical: "/news" },
-};
+  path: "/news",
+  keywords: ["football agency news", "player signings", "transfers", "Zollgate Agency news"],
+});
 
 export default function NewsPage() {
   return (
     <>
+      <JsonLd data={breadcrumbs({ name: "News", path: "/news" })} />
       <PageHero eyebrow="News" title="Agency news" text="Signings, transfers and updates from Zollgate Agency and our players." />
       <section className="mx-auto max-w-5xl px-4 py-20 sm:px-6">
         <ul className="space-y-8">

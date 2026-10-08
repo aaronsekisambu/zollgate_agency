@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ButtonLink } from "@/components/ui";
-import { formatDate, getPlayer, getPost, posts } from "@/lib/data";
+import { ButtonLink, JsonLd } from "@/components/ui";
+import { formatDate, getPlayer, getPost, posts, siteUrl, type Player, type Post } from "@/lib/data";
+import { breadcrumbs, pageMetadata } from "@/lib/seo";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -13,11 +14,34 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = getPost((await params).slug);
+  if (!post) return { title: "Article not found", robots: { index: false } };
+  const player = post.player ? getPlayer(post.player) : undefined;
+  return pageMetadata({
+    title: post.title,
+    description: post.excerpt,
+    path: `/news/${post.slug}`,
+    image: post.image ? { url: post.image, alt: post.title } : undefined,
+    article: { publishedTime: post.date, section: post.category, tags: player ? [player.name] : undefined },
+    keywords: [post.category, player?.name, player?.club, "Zollgate Agency", "football news"].filter((k): k is string => Boolean(k)),
+  });
+}
+
+function articleLd(post: Post, player?: Player) {
+  const url = `${siteUrl}/news/${post.slug}`;
   return {
-    title: post ? post.title : "Article not found",
-    description: post?.excerpt,
-    alternates: post ? { canonical: `/news/${post.slug}` } : undefined,
-    openGraph: post?.image ? { images: [post.image] } : undefined,
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: post.title,
+    description: post.excerpt,
+    image: post.image ? [`${siteUrl}${post.image}`] : [`${siteUrl}/opengraph-image.jpg`],
+    datePublished: post.date,
+    dateModified: post.date,
+    articleSection: post.category,
+    mainEntityOfPage: url,
+    url,
+    author: { "@id": `${siteUrl}/#organization` },
+    publisher: { "@id": `${siteUrl}/#organization` },
+    about: player && { "@type": "Person", name: player.name, url: `${siteUrl}/players/${player.slug}` },
   };
 }
 
@@ -28,6 +52,9 @@ export default async function PostPage({ params }: Props) {
 
   return (
     <article className="mx-auto max-w-3xl px-4 pb-24 pt-32 sm:px-6 sm:pt-40">
+      <JsonLd
+        data={[breadcrumbs({ name: "News", path: "/news" }, { name: post.title, path: `/news/${post.slug}` }), articleLd(post, player)]}
+      />
       <Link href="/news" className="text-sm text-mute hover:text-brand-deep">← All news</Link>
       <p className="mt-8 text-xs uppercase tracking-wider">
         <span className="font-bold text-brand-deep">{post.category}</span>
