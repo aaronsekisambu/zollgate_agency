@@ -3,7 +3,12 @@ import Image from "next/image";
 import { ButtonLink, Icon, PageHero, SectionHeading } from "@/components/ui";
 import { services, steps } from "@/lib/data";
 
-export const metadata: Metadata = { title: "Services" };
+export const metadata: Metadata = {
+  title: "Services",
+  description:
+    "Player representation, contract negotiation, scouting, career development, legal support, media and relocation services for professional footballers.",
+  alternates: { canonical: "/services" },
+};
 
 export default function ServicesPage() {
   return (

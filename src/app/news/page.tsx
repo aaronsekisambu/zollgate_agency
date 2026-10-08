@@ -4,7 +4,12 @@ import Link from "next/link";
 import { PageHero } from "@/components/ui";
 import { formatDate, posts } from "@/lib/data";
 
-export const metadata: Metadata = { title: "News" };
+export const metadata: Metadata = {
+  title: "News",
+  description:
+    "Latest signings, transfers and updates from Zollgate Agency and the footballers we represent.",
+  alternates: { canonical: "/news" },
+};
 
 export default function NewsPage() {
   return (

@@ -1,3 +1,6 @@
+/** Canonical origin of this site; used for metadata, sitemap and structured data. */
+export const siteUrl = "https://zollgate.de";
+
 /** Contact details shared with the parent company, Zollgate (zollgate.com). */
 export const company = {
   email: "info@zollgate.com",

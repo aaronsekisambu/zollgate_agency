@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/ui";
 import PlayerGrid from "./PlayerGrid";
 
-export const metadata: Metadata = { title: "Players" };
+export const metadata: Metadata = {
+  title: "Players",
+  description:
+    "Browse the Zollgate Agency roster: professional footballers and rising talents across Europe, filterable by position, club and nationality.",
+  alternates: { canonical: "/players" },
+};
 
 export default function PlayersPage() {
   return (

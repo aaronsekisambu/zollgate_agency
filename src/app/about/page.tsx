@@ -3,7 +3,12 @@ import Image from "next/image";
 import { ButtonLink, PageHero, SectionHeading } from "@/components/ui";
 import { company } from "@/lib/data";
 
-export const metadata: Metadata = { title: "About" };
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Meet Zollgate Agency: a player-first football agency built on transparency, licensed expertise and long-term career thinking.",
+  alternates: { canonical: "/about" },
+};
 
 const values = [
   { title: "Player first", text: "Every decision starts with what is best for the player's long-term career, not the next commission." },

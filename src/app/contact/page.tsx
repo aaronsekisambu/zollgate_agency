@@ -4,7 +4,12 @@ import { PageHero } from "@/components/ui";
 import { company } from "@/lib/data";
 import ContactForm from "./ContactForm";
 
-export const metadata: Metadata = { title: "Contact" };
+export const metadata: Metadata = {
+  title: "Contact",
+  description:
+    "Contact Zollgate Agency in Lindau am Bodensee. Players, parents and clubs can reach our agents by email, phone or the enquiry form.",
+  alternates: { canonical: "/contact" },
+};
 
 const details: [string, React.ReactNode][] = [
   ["Email", <a key="e" className="hover:text-brand-deep" href={`mailto:${company.email}`}>{company.email}</a>],

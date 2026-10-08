@@ -16,6 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: post ? post.title : "Article not found",
     description: post?.excerpt,
+    alternates: post ? { canonical: `/news/${post.slug}` } : undefined,
     openGraph: post?.image ? { images: [post.image] } : undefined,
   };
 }

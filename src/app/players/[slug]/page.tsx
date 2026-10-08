@@ -15,6 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: player ? player.name : "Player not found",
     description: player?.bio,
+    alternates: player ? { canonical: `/players/${player.slug}` } : undefined,
     openGraph: player?.photo ? { images: [player.photo] } : undefined,
   };
 }
