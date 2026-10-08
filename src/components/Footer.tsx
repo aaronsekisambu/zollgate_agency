@@ -39,9 +39,6 @@ export default function Footer() {
               <br />
               {company.country}
             </li>
-            <li>
-              <a className="hover:text-brand" href={company.linkedin} target="_blank" rel="noopener">LinkedIn</a>
-            </li>
           </ul>
         </div>
       </div>

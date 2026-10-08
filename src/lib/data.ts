@@ -6,7 +6,6 @@ export const company = {
   street: "Von-Behring-Straße 9",
   city: "88131 Lindau am Bodensee",
   country: "Germany",
-  linkedin: "https://linkedin.com/company/zollgate",
   parentUrl: "https://www.zollgate.com",
   imprintUrl: "https://www.zollgate.com/imprint",
   privacyUrl: "https://www.zollgate.com/privacy-policy",
